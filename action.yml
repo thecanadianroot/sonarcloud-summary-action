@@ -1,0 +1,121 @@
+name: 'SonarCloud Summary Action'
+description: 'Groups SonarCloud pull-request comments into a nicely formatted table comment. Useful for mono-repositories.'
+branding:
+  icon: align-left
+  color: orange
+inputs:
+  github-repository:
+    description: 'The GitHub repository (organization/repository_name)'
+    required: true
+  github-token:
+    description: 'The GitHub token'
+    required: true
+  pull-request:
+    description: 'The pull-request number'
+    required: true
+  commit:
+    description: 'The commit from which comments will be considered. This is optional, but helps limit API calls to GitHub API.'
+  comment-header:
+    description: 'The comment header that you wish to use for the table comment. (defaults to: SonarCloud Summary:)'
+  project-name-pattern:
+    description: 'The pattern that will be used in order to find the project name in SonarCloud pull-request comments. This is optional and should work out of the box, but if you need something else, you must at least define a named group called project_name within your pattern.'
+  quality-gate-pattern:
+    description: 'The pattern that will be used in order to find the quality gate label line. This is optional and should work out of the box.'
+  quality-gate-sub-pattern:
+    description: 'The pattern that will be used in order to find what needs to be replaced within the quality gate label line. This is optional and should work out of the box.'
+  quality-gate-sub-repl:
+    description: 'The replacement that will be used for quality gate label line. This is optional and should work out of the box.'
+  bugs-pattern:
+    description: 'TODO'
+  bugs-sub-pattern:
+    description: 'TODO'
+  bugs-sub-repl:
+    description: 'TODO'
+  vulnerabilities-pattern:
+    description: 'TODO'
+  vulnerabilities-sub-pattern:
+    description: 'TODO'
+  vulnerabilities-sub-repl:
+    description: 'TODO'
+  security-hotspots-pattern:
+    description: 'TODO'
+  security-hotspots-sub-pattern:
+    description: 'TODO'
+  security-hotspots-sub-repl:
+    description: 'TODO'
+  code-smells-pattern:
+    description: 'TODO'
+  code-smells-sub-pattern:
+    description: 'TODO'
+  code-smells-sub-repl:
+    description: 'TODO'
+  code-coverage-pattern:
+    description: 'TODO'
+  code-coverage-sub-pattern:
+    description: 'TODO'
+  code-coverage-sub-repl:
+    description: 'TODO'
+  code-duplication-pattern:
+    description: 'TODO'
+  code-duplication-sub-pattern:
+    description: 'TODO'
+  code-duplication-sub-repl:
+    description: 'TODO'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - -gr
+    - ${{ inputs.github-repository }}
+    - -gt
+    - ${{ inputs.github-token }}
+    - -pr
+    - ${{ inputs.pull-request }}
+    - -c
+    - ${{ inputs.commit }}
+    - -ch
+    - ${{ inputs.comment-header }}
+    - -pnp
+    - ${{ inputs.project-name-pattern }}
+    - -qgp
+    - ${{ inputs.quality-gate-pattern }}
+    - -qgsp
+    - ${{ inputs.quality-gate-sub-pattern }}
+    - -qgsr
+    - ${{ inputs.quality-gate-sub-repl }}
+    - -bp
+    - ${{ inputs.bugs-pattern }}
+    - -bsp
+    - ${{ inputs.bugs-sub-pattern }}
+    - -bsr
+    - ${{ inputs.bugs-sub-repl }}
+    - -vp
+    - ${{ inputs.vulnerabilities-pattern }}
+    - -vsp
+    - ${{ inputs.vulnerabilities-sub-pattern }}
+    - -vsr
+    - ${{ inputs.vulnerabilities-sub-repl }}
+    - -shp
+    - ${{ inputs.security-hotspots-pattern }}
+    - -shsp
+    - ${{ inputs.security-hotspots-sub-pattern }}
+    - -shsr
+    - ${{ inputs.security-hotspots-sub-repl }}
+    - -csp
+    - ${{ inputs.code-smells-pattern }}
+    - -cssp
+    - ${{ inputs.code-smells-sub-pattern }}
+    - -cssr
+    - ${{ inputs.code-smells-sub-repl }}
+    - -ccp
+    - ${{ inputs.code-coverage-pattern }}
+    - -ccsp
+    - ${{ inputs.code-coverage-sub-pattern }}
+    - -ccsr
+    - ${{ inputs.code-coverage-sub-repl }}
+    - -cdp
+    - ${{ inputs.code-duplication-pattern }}
+    - -cdsp
+    - ${{ inputs.code-duplication-sub-pattern }}
+    - -cdsr
+    - ${{ inputs.code-duplication-sub-repl }}
