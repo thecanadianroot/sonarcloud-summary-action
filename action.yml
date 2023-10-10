@@ -26,41 +26,41 @@ inputs:
   quality-gate-sub-repl:
     description: 'The replacement that will be used for quality gate label line. This is optional and should work out of the box.'
   bugs-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find the bugs label line. This is optional and should work out of the box.'
   bugs-sub-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find what needs to be replaced within the bugs label line. This is optional and should work out of the box.'
   bugs-sub-repl:
-    description: 'TODO'
+    description: 'The replacement that will be used for bugs label line. This is optional and should work out of the box.'
   vulnerabilities-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find the vulnerabilities label line. This is optional and should work out of the box.'
   vulnerabilities-sub-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find what needs to be replaced within the vulnerabilities label line. This is optional and should work out of the box.'
   vulnerabilities-sub-repl:
-    description: 'TODO'
+    description: 'The replacement that will be used for vulnerabilities label line. This is optional and should work out of the box.'
   security-hotspots-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find the security hotspots label line. This is optional and should work out of the box.'
   security-hotspots-sub-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find what needs to be replaced within the security hotspots label line. This is optional and should work out of the box.'
   security-hotspots-sub-repl:
-    description: 'TODO'
+    description: 'The replacement that will be used for security hotspots label line. This is optional and should work out of the box.'
   code-smells-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find the code smells label line. This is optional and should work out of the box.'
   code-smells-sub-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find what needs to be replaced within the code smells label line. This is optional and should work out of the box.'
   code-smells-sub-repl:
-    description: 'TODO'
+    description: 'The replacement that will be used for code smells label line. This is optional and should work out of the box.'
   code-coverage-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find the code coverage label line. This is optional and should work out of the box.'
   code-coverage-sub-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find what needs to be replaced within the code coverage label line. This is optional and should work out of the box.'
   code-coverage-sub-repl:
-    description: 'TODO'
+    description: 'The replacement that will be used for code coverage label line. This is optional and should work out of the box.'
   code-duplication-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find the code duplication label line. This is optional and should work out of the box.'
   code-duplication-sub-pattern:
-    description: 'TODO'
+    description: 'The pattern that will be used in order to find what needs to be replaced within the code duplication label line. This is optional and should work out of the box.'
   code-duplication-sub-repl:
-    description: 'TODO'
+    description: 'The replacement that will be used for code duplication label line. This is optional and should work out of the box.'
 runs:
   using: 'docker'
   image: 'Dockerfile'

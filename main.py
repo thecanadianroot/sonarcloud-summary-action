@@ -96,7 +96,7 @@ if __name__ == '__main__':
             continue
         if comment.user.login == 'sonarcloud[bot]':
             m = re.search(
-                this_or_that(args.project_name_pattern, r'id=(?P<project_name>[a-zA-Z-_\.\:]+)&'),
+                this_or_that(args.project_name_pattern, r'id=(?P<project_name>[a-zA-Z0-9-_\.\:]+)&'),
                 comment.body
             )
             if m:
