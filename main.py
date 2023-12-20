@@ -20,13 +20,9 @@ def parse_args(args):
     parser.add_argument('-qgsp', '--quality-gate-sub-pattern', type=pattern, required=False)
     parser.add_argument('-qgsr', '--quality-gate-sub-repl', type=pattern, required=False)
 
-    parser.add_argument('-bp', '--bugs-pattern', type=pattern, required=False)
-    parser.add_argument('-bsp', '--bugs-sub-pattern', type=pattern, required=False)
-    parser.add_argument('-bsr', '--bugs-sub-repl', type=pattern, required=False)
-
-    parser.add_argument('-vp', '--vulnerabilities-pattern', type=pattern, required=False)
-    parser.add_argument('-vsp', '--vulnerabilities-sub-pattern', type=pattern, required=False)
-    parser.add_argument('-vsr', '--vulnerabilities-sub-repl', type=pattern, required=False)
+    parser.add_argument('-ip', '--issues-pattern', type=pattern, required=False)
+    parser.add_argument('-isp', '--issues-sub-pattern', type=pattern, required=False)
+    parser.add_argument('-isr', '--issues-sub-repl', type=pattern, required=False)
 
     parser.add_argument('-shp', '--security-hotspots-pattern', type=pattern, required=False)
     parser.add_argument('-shsp', '--security-hotspots-sub-pattern', type=pattern, required=False)
@@ -76,7 +72,7 @@ def substitute(sub, sub_alt, repl, repl_alt, string):
     :param string: a string
     :return: a string
     """
-    return re.sub(this_or_that(sub, sub_alt), this_or_that(repl, repl_alt), string)
+    return re.sub(this_or_that(sub, sub_alt), this_or_that(repl, repl_alt), string).rstrip()
 
 
 if __name__ == '__main__':
@@ -104,83 +100,67 @@ if __name__ == '__main__':
                 if project_name:
                     project = {
                         "quality-gate": "N/A",
-                        "bugs": "N/A",
-                        "vulnerabilities": "N/A",
+                        "issues": "N/A",
                         "security-hotspots": "N/A",
-                        "code-smells": "N/A",
                         "code-coverage": "N/A",
                         "code-duplication": "N/A",
                     }
                     for line in comment.body.splitlines(keepends=False):
                         if re.search(
-                                this_or_that(args.quality_gate_pattern, r'\[!\[Quality Gate (passed|failed)\]'), line
+                                this_or_that(args.quality_gate_pattern, r'\[!\[Quality Gate (Passed|Failed)\]'), line
                         ):
                             project["quality-gate"] = substitute(
-                                args.quality_gate_sub_pattern, r'(.*)(\[!\[Quality Gate )(\bpassed\b|\bfailed\b)(\].*)',
-                                args.quality_gate_sub_repl, r'\2\3\4',
+                                args.quality_gate_sub_pattern, r'(.*)(\[!\[)(.*)(\]\(.*\)\])(\(.*\))(.*)',
+                                args.quality_gate_sub_repl, r'\2\4\5',
                                 line
                             )
                         elif re.search(
-                                this_or_that(args.bugs_pattern, r'\[!\[Bug]'), line
+                                this_or_that(args.issues_pattern, r'\[\d+.*(issue|issues).*]'), line
                         ):
-                            project["bugs"] = substitute(
-                                args.bugs_sub_pattern, r'(\[\d)( Bugs)(\])',
-                                args.bugs_sub_repl, r'\1\3',
+                            project["issues"] = substitute(
+                                args.issues_sub_pattern, r'(.*)(\[\d+)(.*)(issue|issues)(.*)(\])',
+                                args.issues_sub_repl, r'\2\6',
                                 line
                             )
                         elif re.search(
-                                this_or_that(args.vulnerabilities_pattern, r'\[!\[Vulnerability]'), line
-                        ):
-                            project["vulnerabilities"] = substitute(
-                                args.vulnerabilities_sub_pattern, r'(\[\d)( Vulnerabilities)(\])',
-                                args.vulnerabilities_sub_repl, r'\1\3',
-                                line
-                            )
-                        elif re.search(
-                                this_or_that(args.security_hotspots_pattern, r'\[!\[Security Hotspot]'), line
+                                this_or_that(args.security_hotspots_pattern,
+                                             r'\[\d+.*(Security|security|Hotspot|hotspot|Hotspots|hotspots).*]'), line
                         ):
                             project["security-hotspots"] = substitute(
-                                args.security_hotspots_sub_pattern, r'(\[\d)( Security Hotspots)(\])',
-                                args.security_hotspots_sub_repl, r'\1\3',
+                                args.security_hotspots_sub_pattern,
+                                r'(.*)(\[\d+)(.*)(Security|security|Hotspot|hotspot|Hotspots|hotspots)(.*)(\])',
+                                args.security_hotspots_sub_repl, r'\2\6',
                                 line
                             )
                         elif re.search(
-                                this_or_that(args.code_smells_pattern, r'\[!\[Code Smell]'), line
-                        ):
-                            project["code-smells"] = substitute(
-                                args.code_smells_sub_pattern, r'(\[\d)( Code Smells)(\])',
-                                args.code_smells_sub_repl, r'\1\3',
-                                line
-                            )
-                        elif re.search(
-                                this_or_that(args.code_coverage_pattern, r'\[[0-9]+\.[0-9]+% Coverage\]'), line
+                                this_or_that(args.code_coverage_pattern, r'\[\d+\.\d+%.*(Coverage|coverage).*\]'), line
                         ):
                             project["code-coverage"] = substitute(
-                                args.code_coverage_sub_pattern, r'(\[[0-9]+\.[0-9]+%)( Coverage)(\])',
-                                args.code_coverage_sub_repl, r'\1\3',
+                                args.code_coverage_sub_pattern, r'(.*)(\[\d+\.\d+%)(.*)(Coverage|coverage)(.*)(\])',
+                                args.code_coverage_sub_repl, r'\2\6',
                                 line
                             )
                         elif re.search(
-                                this_or_that(args.code_duplication_pattern, r'\[[0-9]+\.[0-9]+% Duplication\]'),
+                                this_or_that(args.code_duplication_pattern,
+                                             r'\[\d+\.\d+%.*(Duplication|duplication).*\]'),
                                 line
                         ):
                             project["code-duplication"] = substitute(
-                                args.code_duplication_sub_pattern, r'(\[[0-9]+\.[0-9]+%)( Duplication)(\])',
-                                args.code_duplication_sub_repl, r'\1\3',
+                                args.code_duplication_sub_pattern,
+                                r'(.*)(\[\d+\.\d+%)(.*)(Duplication|duplication)(.*)(\])',
+                                args.code_duplication_sub_repl, r'\2\6',
                                 line
                             )
                     table[project_name] = project
     if table.keys():
-        body = f'### {args.comment_header}\r\n| Project Name | Quality Gate | Bugs | Vulnerabilities | Security Hotspots | Code smells | Coverage | Duplication |\r\n|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|'
+        body = f'### {args.comment_header}\r\n| Project | Quality Gate | Issues | Security Hotspots | Coverage | Duplication |\r\n|---|:---:|:---:|:---:|:---:|:---:|'
 
         for key, value in sorted(table.items()):
             qg = value["quality-gate"]
-            b = value["bugs"]
-            v = value["vulnerabilities"]
+            i = value["issues"]
             sh = value["security-hotspots"]
-            cs = value["code-smells"]
             cc = value["code-coverage"]
             cd = value["code-duplication"]
-            body += f'\r\n| {key} | {qg} | {b} | {v} | {sh} | {cs} | {cc} | {cd} |'
+            body += f'\r\n| {key} | {qg} | {i} | {sh} | {cc} | {cd} |'
 
         issue.create_comment(body)
